@@ -22,7 +22,7 @@ h_thta = tf.nn.softmax(tf.matmul(x, W) + b)
 cost = tf.reduce_mean(-tf.reduce_sum(y * tf.log(h_thta), reduction_indices=1))
 # 选择梯度下降方法
 optimizer = tf.train.GradientDescentOptimizer(0.01).minimize(cost)
-img = cv2.imread('./data/image/7c.jpg', 0)
+img = cv2.imread('./data/image/2c.jpg', 0)
 img = tf.cast(img, tf.float32)
 img_num = tf.reshape(img, (1, -1))
 print(img_num.shape)
