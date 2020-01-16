@@ -89,6 +89,6 @@ with tf.Session() as sess:
         saver.save(sess, './save/cnn_num.ckpt')
     elif train == 0:
         saver.restore(sess, './save/cnn_num.ckpt')
-        batch_xs, batch_ys = mnist.test.next_batch(100)
-        test_accr = sess.run(accr, feed_dict={x: batch_xs, y: batch_ys, keepProb: 1.0})
+        test_xs, test_ys = mnist.test.next_batch(100)
+        test_accr = sess.run(accr, feed_dict={x: test_xs, y: test_ys, keepProb: 1.0})
         print('测试集准确率', test_accr)
