@@ -67,7 +67,7 @@ def convolution_forward(_input, _Weights, _biases, _keepProb):
 result = convolution_forward(x, Weights, biases, keepProb)
 loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=result, labels=y))
 optimizer = tf.train.AdamOptimizer(0.01).minimize(loss)
-# 训练集准确率
+# 准确率
 _corr = tf.equal(tf.argmax(result, 1), tf.argmax(y, 1))
 accr = tf.reduce_mean(tf.cast(_corr, tf.float32))
 # 保存参数 max_to_keep=1表示最多存多少个 这里存一个
