@@ -70,15 +70,25 @@ optimizer = tf.train.AdamOptimizer(0.01).minimize(loss)
 # 训练集准确率
 _corr = tf.equal(tf.argmax(result, 1), tf.argmax(y, 1))
 accr = tf.reduce_mean(tf.cast(_corr, tf.float32))
-
+# 保存参数 max_to_keep=1表示最多存多少个 这里存一个
+saver = tf.train.Saver(max_to_keep=1)
+# 用于判断测试还是训练
+train = 0
 ''' 进行迭代 '''
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
-    for epoch in range(20):
-        avg_loss = 0.0
-        for i in range(10):
-            batch_xs, batch_ys = mnist.train.next_batch(100)
-            sess.run(optimizer, feed_dict={x: batch_xs, y: batch_ys, keepProb: 0.6})
-            avg_loss += sess.run(loss, feed_dict={x: batch_xs, y: batch_ys, keepProb: 1.0}) / 10
-        train_accr = sess.run(accr, feed_dict={x: batch_xs, y: batch_ys, keepProb: 1.0})
-        print('训练集准确率', train_accr)
+    if train == 1:
+        for epoch in range(20):
+            avg_loss = 0.0
+            for i in range(10):
+                batch_xs, batch_ys = mnist.train.next_batch(100)
+                sess.run(optimizer, feed_dict={x: batch_xs, y: batch_ys, keepProb: 0.6})
+                avg_loss += sess.run(loss, feed_dict={x: batch_xs, y: batch_ys, keepProb: 1.0}) / 10
+            train_accr = sess.run(accr, feed_dict={x: batch_xs, y: batch_ys, keepProb: 1.0})
+            print('训练集准确率', train_accr)
+        saver.save(sess, './save/cnn_num.ckpt')
+    elif train == 0:
+        saver.restore(sess, './save/cnn_num.ckpt')
+        batch_xs, batch_ys = mnist.test.next_batch(100)
+        test_accr = sess.run(accr, feed_dict={x: batch_xs, y: batch_ys, keepProb: 1.0})
+        print('测试集准确率', test_accr)
